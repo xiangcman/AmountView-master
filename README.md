@@ -1,1 +1,3 @@
-# AmountView-master
+# 银行类app额度view
+
+
