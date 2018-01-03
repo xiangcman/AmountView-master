@@ -4,7 +4,7 @@
     <image src="https://github.com/1002326270xc/AmountView-master/blob/master/photos/自己撸的额度控件.gif" width="250"/>
 </div>
 
-###使用:
+### 使用:
 
 **xml:**
 ```
@@ -19,11 +19,11 @@
 ```
 这里就定义了三个属性:
 
-**hint_text:**提示文字
+**hint_text:** 提示文字
 
-**max_amount:**最大的额度
+**max_amount:** 最大的额度
 
-**shadow_color:**背景颜色
+**shadow_color:** 背景颜色
 
 **code:**
 ```
