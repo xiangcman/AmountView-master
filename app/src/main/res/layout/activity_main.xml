@@ -17,6 +17,7 @@
         app:shadow_color="#FFD700" />
 
     <com.xiangcheng.amount.AmountView
+        android:id="@+id/original_amountview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/amount_view"

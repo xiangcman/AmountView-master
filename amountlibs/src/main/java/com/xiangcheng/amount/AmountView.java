@@ -2,7 +2,6 @@ package com.xiangcheng.amount;
 
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -64,6 +63,13 @@ public class AmountView extends View {
     private float textTop;
     private int[] amounts;
 
+    //修复进度和数字不同时变动加的，add 2018/1/5
+    private Path realProgressPath;
+    private PathMeasure realProgressPathMeasure;
+
+    private Path realShadowPath;
+    private PathMeasure realShadowPathMeasure;
+
     public AmountView(Context context) {
         this(context, null);
     }
@@ -106,11 +112,11 @@ public class AmountView extends View {
         shadowPaint.setStyle(Paint.Style.STROKE);
         amountPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         amountPaint.setColor(Color.BLACK);
-        amountPaint.setTextSize(dp2sp(25));
+        amountPaint.setTextSize(dp2sp(20));
         amountPaint.setTextAlign(Paint.Align.CENTER);
         hintPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         hintPaint.setColor(Color.BLACK);
-        hintPaint.setTextSize(dp2sp(13));
+        hintPaint.setTextSize(dp2sp(10));
         hintPaint.setTextAlign(Paint.Align.CENTER);
         progressPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         progressPaint.setStrokeWidth(strokeWidth);
@@ -153,9 +159,9 @@ public class AmountView extends View {
                         shadowProgressPath.reset();
                         Log.d(TAG, "progressPathMeasure.getLength() * animation.getAnimatedFraction():" + progressPathMeasure.getLength() * animation.getAnimatedFraction());
                         Log.d(TAG, "progressPathMeasure.getLength():" + progressPathMeasure.getLength());
-                        float progress = progressPathMeasure.getLength() * animation.getAnimatedFraction();
-                        progressPathMeasure.getSegment(0, progress, progressPath, true);
-                        shadowPathMeasure.getSegment(0, shadowPathMeasure.getLength() * animation.getAnimatedFraction(), shadowProgressPath, true);
+                        float percent = animation.getAnimatedFraction();
+                        realProgressPathMeasure.getSegment(0, percent * realProgressPathMeasure.getLength(), progressPath, true);
+                        realShadowPathMeasure.getSegment(0, realShadowPathMeasure.getLength() * percent, shadowProgressPath, true);
                     }
                     invalidate();
                 }
@@ -267,8 +273,17 @@ public class AmountView extends View {
         shadowProgressPath = new Path();
         progressPathMeasure = new PathMeasure();
         progressPathMeasure.setPath(radianPath, false);
+        realProgressPath = new Path();
+        realProgressPathMeasure = new PathMeasure();
+        progressPathMeasure.getSegment(progressPathMeasure.getLength() * 0.5f, progressPathMeasure.getLength(), realProgressPath, true);
+        realProgressPathMeasure.setPath(realProgressPath, false);
+
         shadowPathMeasure = new PathMeasure();
         shadowPathMeasure.setPath(shadowPath, false);
+        realShadowPath = new Path();
+        realShadowPathMeasure = new PathMeasure();
+        shadowPathMeasure.getSegment(shadowPathMeasure.getLength() * 0.5f, shadowPathMeasure.getLength(), realShadowPath, true);
+        realShadowPathMeasure.setPath(realShadowPath, false);
         setMeasuredDimension(width, height);
     }
 
