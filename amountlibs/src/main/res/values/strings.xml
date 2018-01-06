@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Amountlibs</string>
+    <string name="default_hint_amount">最高可借金额</string>
 </resources>

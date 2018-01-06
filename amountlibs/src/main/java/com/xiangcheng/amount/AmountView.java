@@ -13,6 +13,7 @@ import android.graphics.PathMeasure;
 import android.graphics.RectF;
 import android.graphics.Shader;
 import android.icu.text.DecimalFormat;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -88,10 +89,10 @@ public class AmountView extends View {
         amount = array.getInt(R.styleable.AmountView_max_amount, MAX_AMOUNT);
         hintText = array.getString(R.styleable.AmountView_hint_text);
         if (TextUtils.isEmpty(hintText)) {
-            hintText = "最高可借金额";
+            hintText = context.getString(R.string.default_hint_amount);
         }
         shadowColor = array.getColor(R.styleable.AmountView_shadow_color, shadowColor);
-        //透明度是33
+        //透明度是33,16进制换成10进制就是3*16+3
         alphaShadowColor = Color.argb(16 * 3 + 3, Color.red(shadowColor), Color.green(shadowColor), Color.blue(shadowColor));
         Log.d(TAG, "amount:" + amount);
         shadowOffset = dp2px(7);
@@ -133,14 +134,45 @@ public class AmountView extends View {
         animators = new ArrayList<>();
         String format;
         if (amount >= 1000) {
-            DecimalFormat df = new DecimalFormat("#,###");
-            format = df.format(amount);
+            if (Build.VERSION.SDK_INT >= 24) {
+                DecimalFormat df = new DecimalFormat("#,###");
+                format = df.format(amount);
+            } else {
+                String amountStr = String.valueOf(amount);
+                Log.d(TAG, "amountStr:" + amountStr);
+                StringBuilder sb = new StringBuilder();
+                for (int i = amountStr.length() - 1; i >= 0; i--) {
+                    sb.append(amountStr.charAt(i));
+                    Log.d(TAG, "amountStr.charAt(i):" + amountStr.charAt(i));
+                }
+                String amountFromR2L = sb.toString();
+                List<String> amountList = new ArrayList<>();
+
+                while (amountFromR2L.length() > 3) {
+                    amountList.add(amountFromR2L.substring(0, 3) + ",");
+                    amountFromR2L = amountFromR2L.substring(3, amountFromR2L.length());
+                }
+                Log.d(TAG, "amountFromR2L:" + amountFromR2L);
+                if (amountFromR2L.length() > 0 && amountFromR2L.length() < 3) {
+                    amountList.add(amountFromR2L);
+                }
+                sb = new StringBuilder();
+                for (int i = 0; i < amountList.size(); i++) {
+                    sb.append(amountList.get(i));
+                }
+                StringBuilder finalSb = new StringBuilder();
+                for (int i = sb.length() - 1; i >= 0; i--) {
+                    finalSb.append(sb.toString().charAt(i));
+                }
+                format = finalSb.toString();
+            }
         } else {
             format = amount + "";
         }
         String[] split = format.split(",");
         amounts = new int[split.length];
         for (int i = 0; i < split.length; i++) {
+            Log.d(TAG, "split[i]:" + split[i]);
             if (split[i].equals("000")) {
                 split[i] = 1000 + "";
             }
@@ -157,9 +189,8 @@ public class AmountView extends View {
                     if (index == 0) {
                         progressPath.reset();
                         shadowProgressPath.reset();
-                        Log.d(TAG, "progressPathMeasure.getLength() * animation.getAnimatedFraction():" + progressPathMeasure.getLength() * animation.getAnimatedFraction());
-                        Log.d(TAG, "progressPathMeasure.getLength():" + progressPathMeasure.getLength());
                         float percent = animation.getAnimatedFraction();
+                        Log.d(TAG, "percent:" + percent);
                         realProgressPathMeasure.getSegment(0, percent * realProgressPathMeasure.getLength(), progressPath, true);
                         realShadowPathMeasure.getSegment(0, realShadowPathMeasure.getLength() * percent, shadowProgressPath, true);
                     }
@@ -299,5 +330,16 @@ public class AmountView extends View {
 
     private int dp2sp(float value) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, value, getResources().getDisplayMetrics());
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        super.onDetachedFromWindow();
+        for (int i = 0; i < animators.size(); i++) {
+            ValueAnimator valueAnimator = animators.get(i);
+            if (valueAnimator != null && valueAnimator.isRunning()) {
+                valueAnimator.end();
+            }
+        }
     }
 }
