@@ -1,7 +1,6 @@
 # 银行类app额度view
 
-[ ![Download](null/packages/a1002326270/maven/amountlibs/images/download.svg?version=1.0) ](https://bintray.com/a1002326270/maven/amountlibs/1.0/link)
-
+[ ![Download](https://api.bintray.com/packages/a1002326270/maven/amountlibs/images/download.svg?version=1.0) ](https://bintray.com/a1002326270/maven/amountlibs/1.0/link)
 <div>
     <image src="https://github.com/1002326270xc/AmountView-master/blob/master/photos/掌上生活额度控件.gif" width="250"/>
     <image src="https://github.com/1002326270xc/AmountView-master/blob/master/photos/自己撸的额度控件.gif" width="250"/>
