@@ -37,7 +37,7 @@ public void start() {
 }
 ```
 
-**gradle dependence:**
+### gradle dependence:
 
 `compile 'com.a1002326270:amountlibs:1.0'`
 
