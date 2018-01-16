@@ -37,6 +37,10 @@ public void start() {
 }
 ```
 
+**gradle dependence:**
+
+`compile 'com.a1002326270:amountlibs:1.0'`
+
 **欢迎大家提出问题，留言板留言或邮箱直接联系我。我会第一时间测试相关的bug**
 
 **欢迎客官到本店光临(qq群):**
