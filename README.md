@@ -40,13 +40,14 @@ public void start() {
 ```
 
 ### maven dependence:
-
+```
 <dependency>
   <groupId>com.a1002326270</groupId>
   <artifactId>amountlibs</artifactId>
   <version>1.0</version>
   <type>pom</type>
 </dependency>
+```
 
 ### gradle dependence:
 
