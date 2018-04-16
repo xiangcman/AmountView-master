@@ -57,7 +57,7 @@ public void start() {
 
 **欢迎客官到本店光临(qq群):**
 
-<image src="https://github.com/1002326270xc/LayoutManager-FlowLayout/blob/master/photos/IMG_0221.jpg" width="250" width="250" title="qq群"/>
+<image src="https://github.com/1002326270xc/LayoutManager-FlowLayout/blob/master/photos/IMG_0221.jpg" width="200" width="200" title="qq群"/>
 
 ### 关于我:
 
